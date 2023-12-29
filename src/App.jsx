@@ -11,10 +11,12 @@ function App() {
   const [transactions, setTransactions] = useState([]);
   const [file, setFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
+
 
   const fetchTransactions = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/report");
+      const response = await axios.get(`${apiUrl}/report`);
       setTransactions(response.data)
     } catch (error) {
       showToastMessage(error.response);
@@ -31,7 +33,7 @@ function App() {
   const uploadFile = async () => {
     const formData = new FormData();
     formData.append('file', file);
-    axios.post('http://localhost:8080/cnab/upload', formData,
+    axios.post(`${apiUrl}/cnab/upload`, formData,
       {
         headers: {
           "Content-Type": 'multipart/form-data'
@@ -150,7 +152,7 @@ function App() {
                     </tr>
                   </thead>
                   <tbody>
-                    {report.transacaoVOList.map((transaction, index) => (
+                    {report.transacaoList.map((transaction, index) => (
                       <tr key={index} className={index % 2 === 0 ? 'bg-gray-100' : ''}>
                         <td className="px-4 py-2">{transaction.cartao}</td>
                         <td className="px-4 py-2">{transaction.cpf}</td>
